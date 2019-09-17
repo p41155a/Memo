@@ -13,6 +13,8 @@ class SideBarVC: UITableViewController {
     let emailLabel = UILabel() // 이메일
     let profileImage = UIImageView() // 프로필 이미지
     
+    let uinfo = UserInfoManager()
+    
     // 목록 데이터
     let titles = ["새글 작성하기", "친구 새글", "달력으로 보기", "공지사항", "통계", "계정 관리"]
     
@@ -33,7 +35,6 @@ class SideBarVC: UITableViewController {
         
         // 이름 레이블
         self.nameLabel.frame = CGRect(x: 70, y: 15, width: 100, height: 30)
-        self.nameLabel.text = "유진이❤️"
         self.nameLabel.textColor = .white
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: 15)
         self.nameLabel.backgroundColor = .clear
@@ -41,14 +42,11 @@ class SideBarVC: UITableViewController {
         
         // 이메일
         self.emailLabel.frame = CGRect(x: 70, y: 30, width: 130, height: 30)
-        self.emailLabel.text = "p41155a@naver.com"
         self.emailLabel.font = UIFont.systemFont(ofSize: 11)
         self.emailLabel.backgroundColor = .clear
         headerView.addSubview(self.emailLabel)
         
         // 기본 프로필 이미지 구현
-        let defaultProfile = UIImage(named: "account.jpg")
-        self.profileImage.image = defaultProfile
         self.profileImage.frame = CGRect(x: 10, y: 10, width: 50, height: 50)
         view.addSubview(self.profileImage)
         // 프로필 이미지 둥글게 처리
@@ -91,5 +89,10 @@ class SideBarVC: UITableViewController {
                 self.revealViewController()?.revealToggle(self)
             }
         }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.nameLabel.text = self.uinfo.name ?? "Guest"
+        self.emailLabel.text = self.uinfo.account ?? ""
+        self.profileImage.image = self.uinfo.profile
     }
 }

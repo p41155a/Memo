@@ -20,11 +20,72 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Cke-VO-Oqu"/>
                     </view>
-                    <navigationItem key="navigationItem" title="프로필" id="dm5-3U-Ikp"/>
+                    <navigationItem key="navigationItem" title="프로필" id="dm5-3U-Ikp">
+                        <barButtonItem key="rightBarButtonItem" title="새 계정" id="VZi-aD-Z8w">
+                            <connections>
+                                <segue destination="8pe-JR-8mU" kind="show" id="dfq-8W-Fcp"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FCj-5f-TBD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="262" y="-804"/>
+            <point key="canvasLocation" x="247" y="-805"/>
+        </scene>
+        <!--신규 계정 등록-->
+        <scene sceneID="RuO-G1-FFc">
+            <objects>
+                <viewController title="신규 계정 등록" id="8pe-JR-8mU" customClass="JoinVC" customModule="Memo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="y6J-hx-JGt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="account" translatesAutoresizingMaskIntoConstraints="NO" id="36k-rJ-bdj">
+                                <rect key="frame" x="10" y="80" width="90" height="90"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fNE-r5-YU4">
+                                <rect key="frame" x="110" y="80" width="255" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="hIX-5C-6cO">
+                                        <rect key="frame" x="0.0" y="28" width="255" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hIX-5C-6cO" id="A6w-JV-xT3">
+                                            <rect key="frame" x="0.0" y="0.0" width="255" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Ul4-LF-DtF">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="CMu-xY-Bp3"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="신규 계정 등록" id="GUS-Jq-1Ek">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="9yO-Hw-PQk">
+                            <connections>
+                                <action selector="submit:" destination="8pe-JR-8mU" id="mCz-BB-CF8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="indicatorView" destination="Ul4-LF-DtF" id="fMw-Hr-LaV"/>
+                        <outlet property="profile" destination="36k-rJ-bdj" id="muD-ea-TN0"/>
+                        <outlet property="tableView" destination="fNE-r5-YU4" id="zie-vx-noi"/>
+                        <segue destination="sca-h4-b9f" kind="unwind" identifier="backProfileVC" unwindAction="backProfileVC:" id="OYm-RN-pav"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="R9W-QI-h2t" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="sca-h4-b9f" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="961" y="-805"/>
         </scene>
         <!--목록-->
         <scene sceneID="aCj-Z2-1va">
@@ -196,7 +257,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gbl-P7-ONx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="261.60000000000002" y="-107.49625187406298"/>
+            <point key="canvasLocation" x="247" y="-107"/>
         </scene>
         <!--사이드 바 컨트롤러-->
         <scene sceneID="TRd-94-xhC">
@@ -280,7 +341,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FyA-ME-47e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="262" y="606"/>
+            <point key="canvasLocation" x="247" y="606"/>
         </scene>
         <!--메모 작성-->
         <scene sceneID="RhO-Ci-ZBQ">
@@ -396,4 +457,7 @@
             <point key="canvasLocation" x="-479" y="-804"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="account" width="90" height="90"/>
+    </resources>
 </document>

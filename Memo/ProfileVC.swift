@@ -9,6 +9,7 @@
 import UIKit
 
 class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    var isCalling = false // API 중복 호출 관리
     let uinfo = UserInfoManager() // 개인 정보 관리 매니저
     let profileImage = UIImageView() // 프로필 사진
     let tv = UITableView() // 프로필 목록
@@ -66,6 +67,12 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     }
     
     @objc func doLogin(_ sender: Any) {
+        if self.isCalling == true {
+            self.alert("응답을 기다리는 중입니다. \n잠시만 기다려 주세요")
+            return
+        } else {
+            self.isCalling = true
+        }
         let loginAlert = UIAlertController(title: "LOGIN", message: nil, preferredStyle: .alert)
         // 알림창에 들어갈 입력폼 추가
         loginAlert.addTextField() { (tf) in
@@ -76,22 +83,27 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             tf.isSecureTextEntry = true
         }
         // 알림창 버튼 추가
-        loginAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        loginAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+            self.isCalling = false
+        })
         loginAlert.addAction(UIAlertAction(title: "Login", style: .destructive) { (_) in
+            // 네트워크 인디케이터 실행
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true // 네트워크 인디케이터 시작
             let account = loginAlert.textFields?[0].text ?? ""
             let passwd = loginAlert.textFields?[1].text ?? ""
             
-            if self.uinfo.login(account: account, passwd: passwd) {
-                // 로그인 성공시 처리할 내용
-                self.tv.reloadData() // 테이블 뷰를 갱신하다
-                self.profileImage.image = self.uinfo.profile // 이미지 프로필을 갱신한다.
-                self.drawBtn() // 로그인/로그아웃 버튼을 출력한다
-            } else {
-                let msg = "로그인에 실패했습니다."
-                let alert = UIAlertController(title: nil, message: msg, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-                self.present(alert, animated: false)
-            }
+            // 비동기 방식으로 변경
+            self.uinfo.login(account: account, passwd: passwd, success: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false // 네트워크 인디케이터 종료
+                self.isCalling = false
+                self.tv.reloadData() // 테이블 뷰 갱신
+                self.profileImage.image = self.uinfo.profile // 이미지 프로필 갱신
+                self.drawBtn()
+            }, fail: { msg in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false // 네트워크 인디케이터 종료
+                self.isCalling = false
+                self.alert(msg)
+            })
         })
         self.present(loginAlert, animated: false)
     }
@@ -102,8 +114,10 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         let alert = UIAlertController(title: nil, message: msg, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive) { (_) in
-            if self.uinfo.logout() {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            self.uinfo.logout() {
                 // 로그아웃 처리할 내용
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.tv.reloadData() // 테이블 뷰를 갱신하다
                 self.profileImage.image = self.uinfo.profile // 이미지 프로필을 갱신한다.
                 self.drawBtn() // 로그인/로그아웃 버튼을 출력한다
@@ -217,5 +231,9 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             self.profileImage.image = img
         }
         picker.dismiss(animated: true)
+    }
+    
+    @IBAction func backProfileVC(_ segue: UIStoryboardSegue) {
+        // 단지 프로필 화면으로 되돌아오기 위한 표식역활만 할뿐 아무 내용도 작성하지 않으
     }
 }

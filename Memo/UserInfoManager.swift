@@ -153,7 +153,7 @@ class UserInfoManager {
     
     func newProfile(_ profile: UIImage?, success: (()->Void)? = nil, fail: ((String)->Void)? = nil) {
         // API 호출 URL
-        let url = "http://swiftapi.rubypapaer.co.kr:2029/userAccount/profile"
+        let url = "http://swiftapi.rubypaper.co.kr:2029/userAccount/profile"
         // 인증 헤더
         let tk = TokenUtils()
         let header = tk.getAuthorizationHeader()

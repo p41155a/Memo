@@ -106,6 +106,14 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 self.tv.reloadData() // 테이블 뷰 갱신
                 self.profileImage.image = self.uinfo.profile // 이미지 프로필 갱신
                 self.drawBtn()
+                // 서버와 데이터 동기화
+                let sync = DataSync()
+                DispatchQueue.global(qos: .background).async {
+                    sync.downloadBackupData() // 서버에 저장된 데이터가 있으면 내려받는다
+                }
+                DispatchQueue.global(qos: .background).async {
+                    sync.uploadData() // 서버에 저장해야 할 데이터가 있으면 업로드한다.
+                }
             }, fail: { msg in
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false // 네트워크 인디케이터 종료
                 self.isCalling = false
@@ -128,7 +136,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 self.tv.reloadData() // 테이블 뷰를 갱신하다
                 self.profileImage.image = self.uinfo.profile // 이미지 프로필을 갱신한다.
                 self.drawBtn() // 로그인/로그아웃 버튼을 출력한다
-            }
+                }
         })
         self.present(alert, animated: false)
     }

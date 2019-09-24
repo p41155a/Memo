@@ -226,9 +226,18 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     
     // 이미지 선택시 호출됨
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // 네트워크 인디케이터 실행
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         if let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            self.uinfo.profile = img
-            self.profileImage.image = img
+            self.uinfo.newProfile(img, success:  {
+                // 네트워크 인디케이터 종료
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.profileImage.image = img
+            }, fail: {msg in
+                // 네트워크 인디케이터 종료
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.alert(msg)
+            })
         }
         picker.dismiss(animated: true)
     }
